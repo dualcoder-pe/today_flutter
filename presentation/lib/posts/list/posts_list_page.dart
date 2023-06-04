@@ -45,9 +45,9 @@ class PostsListPage extends BasePage {
     List<Widget> list = List.empty(growable: true);
     if(context.read<PostsListBloc>().isLoggedIn) {
       list.add(
-        TextButton(onPressed: () {
+        IconButton(onPressed: () {
           context.read<AppBloc>().navigate(AppPage.postsWrite);
-        }, child: const Text("Write", style: TextStyle(color: Colors.white),)),
+        }, icon: const Icon(Icons.post_add)),
       );
     }
     return list;
