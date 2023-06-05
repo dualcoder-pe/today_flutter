@@ -16,8 +16,13 @@ class PostsListBloc extends BaseBloc<PostsListEvent, PostsListState> {
   final AppNavigation _appNavigation;
 
   PostsListBloc(super.initialState, this._postRepository, this._loginBloc, this._appNavigation) {
+    on<InitPostsListEvent>(_onInit);
     on<RequestPostsListEvent>(_onRequest);
     on<ReadPostsListEvent>(_onRead);
+  }
+
+  void _onInit(InitPostsListEvent event, Emitter<PostsListState> emit) async {
+    emit(InitPostsListState());
   }
 
   void _onRequest(RequestPostsListEvent event, Emitter<PostsListState> emit) async {

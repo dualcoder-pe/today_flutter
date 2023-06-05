@@ -13,6 +13,7 @@ import 'package:presentation/posts/list/posts_list_event.dart';
 import 'package:presentation/posts/list/posts_list_state.dart';
 
 import '../../base/base_page.dart';
+import '../../common/indicator.dart';
 
 class PostsListPage extends BasePage {
   const PostsListPage({super.key});
@@ -34,7 +35,7 @@ class PostsListPage extends BasePage {
                     const SizedBox(
                       height: 10,
                     ),
-                    renderContents(context, state),
+                    Expanded(child: renderContents(context, state)),
                   ],
                 ),
               ),
@@ -56,17 +57,15 @@ class PostsListPage extends BasePage {
 
 Widget renderContents(BuildContext context, PostsListState state) {
   if (state is PostsListSuccessState) {
-    return Expanded(
-      child: postList(state.posts, (index) {
-        final String id = state.posts[index].id;
-        context.read<PostsListBloc>().add(ReadPostsListEvent(id));
-      }),
-    );
+    return postList(state.posts, (index) {
+      final String id = state.posts[index].id;
+      context.read<PostsListBloc>().add(ReadPostsListEvent(id));
+    });
   } else if (state is PostsListFailureState) {
     return Text(state.msg);
   }
   //InitPostsListState
-  return const Text("Initialized");
+  return indicator();
 }
 
 Widget postList(List<PostVO> posts, Function(int) onPress) {

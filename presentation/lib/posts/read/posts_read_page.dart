@@ -4,6 +4,7 @@ import 'package:common/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:presentation/common/indicator.dart';
 
 import '../../base/base_page.dart';
 import 'posts_read_bloc.dart';
@@ -79,7 +80,7 @@ class PostsReadPage extends BasePage {
     } else if (state is PostsReadSuccessState) {
       return readBody(context, state);
     } else {
-      return const Text("Loading...");
+      return indicator();
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:presentation/posts/write/posts_write_event.dart';
 import 'package:presentation/posts/write/posts_write_state.dart';
 
 import '../../base/base_page.dart';
+import '../../common/tool_bar.dart';
 
 class PostsWritePage extends BasePage {
   PostsWritePage({super.key});
@@ -61,40 +62,7 @@ class PostsWritePage extends BasePage {
         const SizedBox(
           height: 20,
         ),
-        QuillToolbar.basic(
-          controller: _bodyController,
-          showAlignmentButtons: false,
-          showBackgroundColorButton: false,
-          showBoldButton: true,
-          showCenterAlignment: false,
-          showClearFormat: false,
-          showCodeBlock: false,
-          showColorButton: true,
-          showDirection: false,
-          showDividers: false,
-          showFontFamily: false,
-          showFontSize: true,
-          showHeaderStyle: true,
-          showIndent: false,
-          showInlineCode: false,
-          showItalicButton: false,
-          showJustifyAlignment: false,
-          showLeftAlignment: false,
-          showLink: false,
-          showListBullets: false,
-          showListCheck: false,
-          showListNumbers: false,
-          showQuote: false,
-          showRedo: false,
-          showRightAlignment: false,
-          showSearchButton: false,
-          showSmallButton: false,
-          showStrikeThrough: true,
-          showSubscript: false,
-          showSuperscript: false,
-          showUnderLineButton: true,
-          showUndo: false,
-        ),
+        simpleQuillToolbar(_bodyController),
         Expanded(child: QuillEditor.basic(controller: _bodyController, readOnly: false)),
       ],
     );
