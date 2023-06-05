@@ -12,30 +12,30 @@ part 'api.g.dart';
 abstract class Api {
   factory Api(Dio dio, {String baseUrl}) = _Api;
 
-  @POST("api/auth/register")
+  @POST("auth/register")
   Future<LoginResponseDto> register(@Body() Map<String, dynamic> map);
 
-  @POST("api/auth/login")
+  @POST("auth/login")
   Future<LoginResponseDto> login(@Body() Map<String, dynamic> map);
 
-  @GET("api/auth/check")
+  @GET("auth/check")
   Future<LoginResponseDto> check();
 
-  @POST("api/auth/logout")
+  @POST("auth/logout")
   Future<void> logout();
 
-  @GET("api/posts")
+  @GET("posts")
   Future<List<PostDto>> getPosts(int? page, String? username, String? tag);
 
-  @POST("api/posts")
+  @POST("posts")
   Future<PostDto?> postPosts(@Body() Map<String, dynamic> map);
 
-  @GET("api/posts/{id}")
+  @GET("posts/{id}")
   Future<PostDto?> getPostsById(@Path("id") String id);
 
-  @DELETE("api/posts/{id}")
+  @DELETE("posts/{id}")
   Future<void> deletePostsById(@Path("id") String id);
 
-  @PATCH("api/posts/{id}")
+  @PATCH("posts/{id}")
   Future<PostDto?> patchPostsById(@Path("id") String id);
 }

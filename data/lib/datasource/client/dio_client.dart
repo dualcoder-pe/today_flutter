@@ -22,7 +22,7 @@ class HttpClientBuilder {
   }
 
   HttpClient build() {
-    final dio = Dio(BaseOptions(baseUrl: "https://dualcoder.pe.kr/"));
+    final dio = Dio(BaseOptions(baseUrl: "https://dualcoder.pe.kr/api/"));
     interceptors.add(CookieManager(CookieJar()));
     dio.interceptors.addAll(interceptors);
     return HttpClient(dio);
