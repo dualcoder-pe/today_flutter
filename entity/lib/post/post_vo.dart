@@ -16,6 +16,7 @@ class PostVO with _$PostVO {
 }
 
 extension PostVOExt on PostVO {
+  bool get isEmpty => id.isEmpty;
   String get publishedDateStr =>
       DateFormat("yyyy-MM-dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(publishedDate)).toString();
 }

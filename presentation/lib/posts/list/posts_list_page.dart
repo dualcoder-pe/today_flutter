@@ -11,9 +11,11 @@ import 'package:presentation/app/app_bloc.dart';
 import 'package:presentation/posts/list/posts_list_bloc.dart';
 import 'package:presentation/posts/list/posts_list_event.dart';
 import 'package:presentation/posts/list/posts_list_state.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../base/base_page.dart';
 import '../../common/indicator.dart';
+import '../../common/placeholder.dart';
 
 class PostsListPage extends BasePage {
   const PostsListPage({super.key});
@@ -44,11 +46,13 @@ class PostsListPage extends BasePage {
 
   List<Widget> actions(BuildContext context, PostsListState state) {
     List<Widget> list = List.empty(growable: true);
-    if(context.read<PostsListBloc>().isLoggedIn) {
+    if (context.read<PostsListBloc>().isLoggedIn) {
       list.add(
-        IconButton(onPressed: () {
-          context.read<AppBloc>().navigate(AppPage.postsWrite);
-        }, icon: const Icon(Icons.post_add)),
+        IconButton(
+            onPressed: () {
+              context.read<AppBloc>().navigate(AppPage.postsWrite);
+            },
+            icon: const Icon(Icons.post_add)),
       );
     }
     return list;
@@ -64,7 +68,7 @@ Widget renderContents(BuildContext context, PostsListState state) {
   } else if (state is PostsListFailureState) {
     return Text(state.msg);
   } else {
-    return indicator();
+    return postList(List.from([PostVO.empty(), PostVO.empty(), PostVO.empty()]), (_) {});
   }
 }
 
@@ -75,12 +79,12 @@ Widget postList(List<PostVO> posts, Function(int) onPress) {
         return GestureDetector(
           onTap: () => onPress(index),
           behavior: HitTestBehavior.translucent,
-          child: postListItem(posts[index]),
+          child: postListItem(context, posts[index]),
         );
       });
 }
 
-Widget postListItem(PostVO post) {
+Widget postListItem(BuildContext context, PostVO post) {
   const double titleSize = 25;
   const double titleMargin = 10;
   const double dateSize = 15;
@@ -90,13 +94,29 @@ Widget postListItem(PostVO post) {
   const double itemMargin = 20;
   const Color dateColor = Colors.grey;
 
-  final String rawBody = Document.fromJson(jsonDecode(post.body)).toPlainText();
-  int index = 30;
-  if(rawBody.count("\n") > 3) {
-    final newIndex = rawBody.nthIndexOf("\n", 3);
-    index = min(index, newIndex);
+  final String body;
+  final String title;
+  final String username;
+  final String publishedDate;
+
+  if (!post.isEmpty) {
+    final String rawBody = Document.fromJson(jsonDecode(post.body)).toPlainText();
+    int index = 30;
+    if (rawBody.count("\n") > 3) {
+      final newIndex = rawBody.nthIndexOf("\n", 3);
+      index = min(index, newIndex);
+    }
+    body = rawBody.ellipsis(index);
+
+    title = post.title;
+    username = post.userVO.username;
+    publishedDate = post.publishedDateStr;
+  } else {
+    body = "";
+    title = "";
+    username = "";
+    publishedDate = "";
   }
-  final String body = rawBody.ellipsis(index);
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,31 +124,39 @@ Widget postListItem(PostVO post) {
       const SizedBox(
         height: itemMargin,
       ),
-      Text(
-        post.title,
-        style: const TextStyle(fontSize: titleSize, fontWeight: FontWeight.bold),
-      ),
+      SizedPlaceholder(
+          title.isEmpty,
+          double.infinity,
+          titleSize,
+          Text(
+            title,
+            style: const TextStyle(fontSize: titleSize, fontWeight: FontWeight.bold),
+          )),
       const SizedBox(
         height: titleMargin,
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(post.userVO.username, style: const TextStyle(fontSize: dateSize, color: dateColor)),
+        children: ListPlaceholder(username.isEmpty, MediaQuery.of(context).size.width / 2, dateSize, [
+          Text(username, style: const TextStyle(fontSize: dateSize, color: dateColor)),
           const SizedBox(
             width: dateRowMargin,
           ),
-          Text(post.publishedDateStr, style: const TextStyle(fontSize: dateSize, color: dateColor)),
-        ],
+          Text(publishedDate, style: const TextStyle(fontSize: dateSize, color: dateColor)),
+        ]),
       ),
       const SizedBox(
         height: dateMargin,
       ),
-      SizedBox(width: double.infinity, child: Text(body, style: const TextStyle(fontSize: bodySize))),
+      SizedPlaceholder(body.isEmpty, double.infinity, bodySize * 3 + 20,
+          SizedBox(width: double.infinity, child: Text(body, style: const TextStyle(fontSize: bodySize)))),
       const SizedBox(
         height: itemMargin,
       ),
-      const Divider(height: 1.0, color: Colors.grey,),
+      const Divider(
+        height: 1.0,
+        color: Colors.grey,
+      ),
     ],
   );
   // return Text(post.toString());
