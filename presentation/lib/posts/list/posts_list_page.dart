@@ -63,9 +63,9 @@ Widget renderContents(BuildContext context, PostsListState state) {
     });
   } else if (state is PostsListFailureState) {
     return Text(state.msg);
+  } else {
+    return indicator();
   }
-  //InitPostsListState
-  return indicator();
 }
 
 Widget postList(List<PostVO> posts, Function(int) onPress) {

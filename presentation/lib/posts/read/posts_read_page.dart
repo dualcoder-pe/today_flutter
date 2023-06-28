@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:common/utils/logger.dart';
+import 'package:entity/post/post_vo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -97,14 +98,20 @@ class PostsReadPage extends BasePage {
         const SizedBox(
           height: 10,
         ),
-        const Divider(height: 1.0, color: Colors.grey,),
+        const Divider(
+          height: 1.0,
+          color: Colors.grey,
+        ),
         const SizedBox(
           height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(state.post.publishedDateStr, style: const TextStyle(color: Colors.grey),),
+            Text(
+              state.post.publishedDateStr,
+              style: const TextStyle(color: Colors.grey),
+            ),
             // const SizedBox(width: 10,),
           ],
         ),
@@ -115,7 +122,7 @@ class PostsReadPage extends BasePage {
   List<Widget> actions(BuildContext context, PostsReadState state) {
     if (state is PostsReadSuccessState) {
       logger("${state.post.userVO.id}, ${state.me.id}");
-      if(state.me.id.isNotEmpty && state.post.userVO.id == state.me.id) {
+      if (state.me.id.isNotEmpty && state.post.userVO.id == state.me.id) {
         return [
           IconButton(
               onPressed: () {

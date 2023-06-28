@@ -1,14 +1,11 @@
 
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class UserVO extends Equatable {
-  final String id;
-  final String username;
+part 'user_vo.freezed.dart';
 
-  UserVO(this.id, this.username);
-
-  @override
-  List<Object?> get props => [id, username];
+@freezed
+class UserVO with _$UserVO {
+  factory UserVO(String id, String username) = _UserVO;
 
   factory UserVO.empty() => UserVO("", "");
 
