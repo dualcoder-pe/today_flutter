@@ -1,5 +1,5 @@
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/app/app_page.dart';
 import 'package:domain/data/repository/post_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,9 +10,9 @@ import 'posts_write_state.dart';
 
 class PostsWriteBloc extends BaseBloc<PostsWriteEvent, PostsWriteState> {
   final PostRepository _postRepository;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
 
-  PostsWriteBloc(super.initialState, this._postRepository, this._appNavigation) {
+  PostsWriteBloc(super.initialState, this._postRepository, this._navigationService) {
     on<SetTagPostsWriteEvent>(_onSetTag);
     on<RemoveTagPostsWriteEvent>(_onRemoveTag);
     on<SavePostsWriteEvent>(_onSave);
@@ -40,7 +40,7 @@ class PostsWriteBloc extends BaseBloc<PostsWriteEvent, PostsWriteState> {
     try {
       final res = await _postRepository.postPosts(event.title, event.body, event.tags);
       if (res) {
-        _appNavigation.navigate(AppPage.postsList);
+        _navigationService.navigate(AppPage.postsList);
       } else {
         emit(PostsWriteFailureState("Failed to save post"));
       }

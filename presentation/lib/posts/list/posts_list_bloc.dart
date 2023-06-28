@@ -1,6 +1,6 @@
 import 'package:common/exception/network_exception.dart';
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/app/app_page.dart';
 import 'package:domain/data/repository/post_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +13,9 @@ import 'posts_list_state.dart';
 class PostsListBloc extends BaseBloc<PostsListEvent, PostsListState> {
   final PostRepository _postRepository;
   final LoginBloc _loginBloc;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
 
-  PostsListBloc(super.initialState, this._postRepository, this._loginBloc, this._appNavigation) {
+  PostsListBloc(super.initialState, this._postRepository, this._loginBloc, this._navigationService) {
     on<InitPostsListEvent>(_onInit);
     on<RequestPostsListEvent>(_onRequest);
     on<ReadPostsListEvent>(_onRead);
@@ -40,7 +40,7 @@ class PostsListBloc extends BaseBloc<PostsListEvent, PostsListState> {
   }
 
   void _onRead(ReadPostsListEvent event, Emitter<PostsListState> emit) {
-    _appNavigation.navigate(AppPage.postsRead, args: {"id": event.id});
+    _navigationService.navigate(AppPage.postsRead, args: {"id": event.id});
   }
 
   bool get isLoggedIn => _loginBloc.isLoggedIn;

@@ -1,6 +1,6 @@
 import 'package:common/exception/network_exception.dart';
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/app/app_page.dart';
 import 'package:domain/data/repository/post_repository.dart';
 import 'package:entity/auth/user_vo.dart';
@@ -14,12 +14,12 @@ import 'posts_read_state.dart';
 
 class PostsReadBloc extends BaseBloc<PostsReadEvent, PostsReadState> {
   final PostRepository _postRepository;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
   final LoginBloc _loginBloc;
   PostsReadState? _prevState;
 
 
-  PostsReadBloc(super.initialState, this._postRepository, this._appNavigation, this._loginBloc) {
+  PostsReadBloc(super.initialState, this._postRepository, this._navigationService, this._loginBloc) {
     on<InitPostsReadEvent>(_onInit);
     on<RequestPostsReadEvent>(_onRequest);
     on<ModifyPostsReadEvent>(_onModify);
@@ -48,7 +48,7 @@ class PostsReadBloc extends BaseBloc<PostsReadEvent, PostsReadState> {
   }
 
   void _onModify(ModifyPostsReadEvent event, Emitter<PostsReadState> emit) async {
-    _appNavigation.navigate(AppPage.postsModify);
+    _navigationService.navigate(AppPage.postsModify);
   }
 
   void _onShowRemovePopup(ShowRemoveDialogPostsReadEvent event, Emitter<PostsReadState> emit) async {

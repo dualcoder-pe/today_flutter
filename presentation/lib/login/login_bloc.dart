@@ -1,6 +1,6 @@
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
 import 'package:domain/app/app_page.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/use_case/auth_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:presentation/login/login_state.dart';
@@ -10,11 +10,11 @@ import 'login_event.dart';
 
 class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
   final AuthUseCase _authUseCase;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
 
   bool get isLoggedIn => state is LoginSuccessState;
 
-  LoginBloc(super.initialState, this._authUseCase, this._appNavigation) {
+  LoginBloc(super.initialState, this._authUseCase, this._navigationService) {
     on<RequestLoginEvent>(_onLogin);
     on<RequestLogoutEvent>(_onLogout);
     on<RequestSignUpEvent>(_onSignUp);
@@ -31,7 +31,7 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
       try {
         final userInfo = await _authUseCase.login(event.id, event.pwd);
         emit(LoginSuccessState(userInfo));
-        _appNavigation.navigate(AppPage.home);
+        _navigationService.navigate(AppPage.home);
       } catch (e) {
         logger(e.toString());
         emit(LoginFailureState("Failed to Login"));
@@ -44,7 +44,7 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
   }
 
   void _onSignUp(RequestSignUpEvent event, Emitter<LoginState> emit) {
-    _appNavigation.navigate(AppPage.register);
+    _navigationService.navigate(AppPage.register);
   }
 
   void _onForgotPassword(RequestForgotPasswordEvent event, Emitter<LoginState> emit) {}

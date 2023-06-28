@@ -1,5 +1,5 @@
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/app/app_page.dart';
 import 'package:domain/use_case/auth_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +13,11 @@ import 'register_state.dart';
 
 class RegisterBloc extends BaseBloc<RegisterEvent, RegisterState> {
   final AuthUseCase _authUseCase;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
 
   final LoginBloc _loginBloc;
 
-  RegisterBloc(super.initialState, this._authUseCase, this._appNavigation, this._loginBloc) {
+  RegisterBloc(super.initialState, this._authUseCase, this._navigationService, this._loginBloc) {
     on<RequestRegisterEvent>(_onRegister);
   }
 
@@ -33,7 +33,7 @@ class RegisterBloc extends BaseBloc<RegisterEvent, RegisterState> {
         logger("Success to Register $userInfo");
         _loginBloc.add(AutoLoginEvent(userInfo));
         emit(InitRegisterState());
-        _appNavigation.navigate(AppPage.home);
+        _navigationService.navigate(AppPage.home);
       } catch (e) {
         logger(e.toString());
         emit(RegisterFailureState("Failed to Login"));

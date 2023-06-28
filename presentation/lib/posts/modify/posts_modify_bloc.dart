@@ -1,6 +1,6 @@
 import 'package:common/exception/network_exception.dart';
 import 'package:common/utils/logger.dart';
-import 'package:domain/app/app_navigation.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:domain/app/app_page.dart';
 import 'package:domain/data/repository/post_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +11,9 @@ import 'posts_modify_state.dart';
 
 class PostsModifyBloc extends BaseBloc<PostsModifyEvent, PostsModifyState> {
   final PostRepository _postRepository;
-  final AppNavigation _appNavigation;
+  final NavigationService _navigationService;
 
-  PostsModifyBloc(super.initialState, this._postRepository, this._appNavigation) {
+  PostsModifyBloc(super.initialState, this._postRepository, this._navigationService) {
     on<RequestPostsModifyEvent>(_onRequest);
     on<SetTagPostsModifyEvent>(_onSetTag);
     on<RemoveTagPostsModifyEvent>(_onRemoveTag);
@@ -56,7 +56,7 @@ class PostsModifyBloc extends BaseBloc<PostsModifyEvent, PostsModifyState> {
     try {
       final res = await _postRepository.postPosts(event.title, event.body, event.tags);
       if (res) {
-        _appNavigation.navigate(AppPage.postsList);
+        _navigationService.navigate(AppPage.postsList);
       } else {
         emit(PostsModifyFailureState("Failed to save post"));
       }

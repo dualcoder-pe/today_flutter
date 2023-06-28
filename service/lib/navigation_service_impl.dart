@@ -1,11 +1,11 @@
-import 'package:domain/app/app_navigation.dart';
 import 'package:domain/app/app_page.dart';
+import 'package:domain/service/navigation_service.dart';
 import 'package:flutter/material.dart';
 
-class AppNavigationImpl extends AppNavigation {
+class NavigationServiceImpl extends NavigationService {
   final GlobalKey<NavigatorState> navKey;
 
-  AppNavigationImpl(this.navKey);
+  NavigationServiceImpl(this.navKey);
 
   @override
   void back() {
